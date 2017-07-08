@@ -26,7 +26,7 @@ fn main() {
     let prog = &text_scn.data;
 
     // This is our data: a real packet, starting with Ethernet header
-    let packet = &mut [
+    let mut packet = vec![
         0x01, 0x23, 0x45, 0x67, 0x89, 0xab,
         0xfe, 0xdc, 0xba, 0x98, 0x76, 0x54,
         0x08, 0x00,             // ethertype
@@ -61,6 +61,6 @@ fn main() {
     // This kind of VM takes a reference to the packet data, but does not need
     // any reference to the metadata buffer: a fixed buffer is handled
     // internally by the VM.
-    let res = vm.prog_exec(packet);
+    let res = vm.prog_exec(& mut packet);
     println!("Program returned: {:?} ({:#x})", res, res);
 }
