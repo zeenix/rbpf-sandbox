@@ -85,5 +85,5 @@ fn main() {
     }
     f.flush().unwrap();
 
-    println!("DONE!");
+    println!("Wrote {} bytes!", rxxd_out.len());
 }
