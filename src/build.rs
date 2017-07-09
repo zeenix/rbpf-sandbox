@@ -14,7 +14,7 @@ fn main() {
                      .arg("-O2")
                      .arg("-emit-llvm")
                      .arg("-c")
-                     .arg("load_elf__block_a_port.c")
+                     .arg("src/load_elf__block_a_port.c")
                      .arg("-o")
                      .arg("-")
                      .output()

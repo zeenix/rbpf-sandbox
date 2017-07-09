@@ -2,7 +2,7 @@
 name = "rbpf-sandbox"
 version = "0.1.0"
 authors = ["Zeeshan Ali <zeenix@gmail.com>"]
-build = "build.rs"
+build = "src/build.rs"
 
 [dependencies]
 rbpf = "^0.0.2"
