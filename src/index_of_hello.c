@@ -6,43 +6,36 @@
 // copied, modified, or distributed except according to those terms.
 
 
-// Block TCP packets on source or destination port 0x9999.
-
 #include <linux/ip.h>
 #include <linux/in.h>
 #include <linux/tcp.h>
 #include <linux/bpf.h>
 
-#define ETH_ALEN 6
-#define ETH_P_IP 0x0008 /* htons(0x0800) */
-#define TCP_HDR_LEN 20
-
-#define BLOCKED_TCP_PORT 0x9999
-
-struct eth_hdr {
-    unsigned char   h_dest[ETH_ALEN];
-    unsigned char   h_source[ETH_ALEN];
-    unsigned short  h_proto;
-};
+#define HEADERS_SIZE 54
+#define NEEDLE "HELLO"
+#define NEEDLE_LEN 5
 
 #define SEC(NAME) __attribute__((section(NAME), used))
 SEC(".classifier")
-int handle_ingress(struct __sk_buff *skb)
+int process_packet(struct __sk_buff *skb)
 {
     void *data = (void *)(long)skb->data;
     void *data_end = (void *)(long)skb->data_end;
-    struct eth_hdr *eth = data;
-    struct iphdr *iph = data + sizeof(*eth);
-    struct tcphdr *tcp = data + sizeof(*eth) + sizeof(*iph);
+    int data_len = data_end - data + 1;
 
-    /* single length check */
-    if (data + sizeof(*eth) + sizeof(*iph) + sizeof(*tcp) > data_end)
-        return 0;
-    if (eth->h_proto != ETH_P_IP)
-        return 0;
-    if (iph->protocol != IPPROTO_TCP)
-        return 0;
-    if (tcp->source == BLOCKED_TCP_PORT || tcp->dest == BLOCKED_TCP_PORT)
-        return -1;
-    return 0;
+    int i = 0;
+    int j = 0;
+    for (i = HEADERS_SIZE; i < data_len; i++) {
+        if (((char *) data)[i] == NEEDLE[j]) {
+            if (j == NEEDLE_LEN - 1) {
+                return i - (NEEDLE_LEN - 1) - HEADERS_SIZE;
+            } else {
+                j++;
+            }
+        } else {
+            j = 0;
+        }
+    }
+
+    return -1;
 }
