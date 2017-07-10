@@ -8,7 +8,7 @@ use rbpf::helpers;
 fn main() {
     // Load a program from an ELF file, e.g. compiled from C to eBPF with
     // clang/LLVM. Some minor modification to the bytecode may be required.
-    let filename = concat!(env!("OUT_DIR"), "/load_elf__block_a_port.o");
+    let filename = concat!(env!("OUT_DIR"), "/index_of_hello.o");
 
     let path = PathBuf::from(filename);
     let file = match elf::File::open_path(&path) {

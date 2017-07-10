@@ -14,15 +14,15 @@ fn main() {
                      .arg("-O2")
                      .arg("-emit-llvm")
                      .arg("-c")
-                     .arg("src/load_elf__block_a_port.c")
+                     .arg("src/index_of_hello.c")
                      .arg("-o")
                      .arg("-")
                      .output()
                      .expect("failed to execute process");
 
     let out_dir = env::var("OUT_DIR").unwrap();
-    let tmp_path = Path::new(&out_dir).join("load_elf__block_a_port.o.tmp");
-    let dest_path = Path::new(&out_dir).join("load_elf__block_a_port.o");
+    let tmp_path = Path::new(&out_dir).join("index_of_hello.o.tmp");
+    let dest_path = Path::new(&out_dir).join("index_of_hello.o");
 
     let mut process = match Command::new("llc")
                      .arg("-march=bpf")
