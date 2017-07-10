@@ -56,7 +56,9 @@ fn main() {
 
     // We register a helper function, that can be called by the program, into
     // the VM.
-    vm.register_helper(helpers::BPF_TRACE_PRINTK_IDX, helpers::bpf_trace_printf);
+    // FIXME: We should be passing helpers::BPF_TRACE_PRINTK_IDX as first parameter instead of 0
+    // but VM calls helper 0 for bpf_trace_printk call.
+    vm.register_helper(0, helpers::bpf_trace_printf);
 
     // This kind of VM takes a reference to the packet data, but does not need
     // any reference to the metadata buffer: a fixed buffer is handled

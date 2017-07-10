@@ -25,6 +25,8 @@ int process_packet(struct __sk_buff *skb)
     void *data_end = (void *)(long)skb->data_end;
     int data_len = data_end - data + 1;
 
+    bpf_trace_printk("%d", sizeof("%d"), data_len);
+
     int i = 0;
     int j = 0;
     for (i = HEADERS_SIZE; i < data_len; i++) {
