@@ -5,6 +5,6 @@ authors = ["Zeeshan Ali <zeenix@gmail.com>"]
 build = "src/build.rs"
 
 [dependencies]
-rbpf = "^0.0.2"
+rbpf = { git = "https://github.com/qmonnet/rbpf" }
 byteorder = "0.5.3"
 elf = "0.0.10"
