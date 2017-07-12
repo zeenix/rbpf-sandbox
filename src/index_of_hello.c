@@ -12,13 +12,15 @@
 #include <linux/bpf.h>
 
 #define HEADERS_SIZE 54
-#define NEEDLE "HELLO"
 #define NEEDLE_LEN 5
 
 #define SEC(NAME) __attribute__((section(NAME), used))
 SEC(".classifier")
 int process_packet(struct __sk_buff *skb)
 {
+    // Having needle as const or #define as string, moves it to another section
+    // in elf and this code won't have access to that.
+    char needle[] = { 'H', 'E', 'L', 'L', 'O' };
     void *data = (void *)(long)skb->data;
     void *data_end = (void *)(long)skb->data_end;
     int data_len = data_end - data + 1;
@@ -26,7 +28,7 @@ int process_packet(struct __sk_buff *skb)
     int i = 0;
     int j = 0;
     for (i = HEADERS_SIZE; i < data_len; i++) {
-        if (((char *) data)[i] == NEEDLE[j]) {
+        if (((char *) data)[i] == needle[j]) {
             if (j == NEEDLE_LEN - 1) {
                 return i - (NEEDLE_LEN - 1) - HEADERS_SIZE;
             } else {
