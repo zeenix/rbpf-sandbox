@@ -11,7 +11,7 @@ use std::io::Read;
 
 fn main() {
     let clang_out = Command::new("clang")
-                     .arg("-O2")
+                     .arg("-O0")
                      .arg("-emit-llvm")
                      .arg("-c")
                      .arg("src/index_of_hello.c")
